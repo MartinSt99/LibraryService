@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="5abdf0c7-0bba-42bb-9739-f32c34e97fc7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8733/Design_Time_Addresses/Kundenservice/Service2/" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="AktienInfo.wsdl" MetadataType="Wsdl" ID="dd241193-8186-49d2-a7fd-1f573c16033e" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Kundenservice/Service2/?wsdl" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="9df0bbfd-a96b-431c-b59d-e7606d69591d" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Kundenservice/Service2/?xsd=xsd2" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="c97e1af5-4cbb-464d-9dbe-f546fec396e3" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Kundenservice/Service2/?disco" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="478d3454-d703-4a36-91c9-dfa719f65b69" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Kundenservice/Service2/?xsd=xsd0" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="99bbc211-57b3-46f1-a035-7fb0a0384dad" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Kundenservice/Service2/?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="User Management" Height="300" Width="557.143">
     <Grid>
-        <DataGrid x:Name="dataGrid" Margin="10"/>
+        <DataGrid x:Name="dataGrid" Margin="10" />
 
     </Grid>
 </Window>

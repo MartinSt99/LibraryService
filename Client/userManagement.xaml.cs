@@ -1,27 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Client.ServiceReference1;
 
 namespace Client
 {
     /// <summary>
-    /// Interaktionslogik für userManagement.xaml
+    ///     Interaktionslogik für userManagement.xaml
     /// </summary>
-    public partial class userManagement : Window, ServiceReference1.IAktienInfoCallback
+    public partial class userManagement : Window, IAktienInfoCallback
     {
         public DataSet users;
+
         public userManagement()
         {
             InitializeComponent();
@@ -29,8 +18,8 @@ namespace Client
 
         public void loginUser(int status)
         {
-            
         }
+
         public void UpdateUsers(DataSet ds)
         {
             dataGrid.ItemsSource = users.Tables["LoadUsers"].DefaultView;
@@ -47,12 +36,12 @@ namespace Client
             dataGrid.Columns[10].Header = "Adresse";
             dataGrid.Columns[11].Header = "Klasse";
             dataGrid.Columns[12].Header = "Gesperrt";
-
         }
+
         public void BookUpdate(string x, double test, DataSet ds)
         {
-            
         }
+
         public void loadBooks(DataSet ds)
         {
         }

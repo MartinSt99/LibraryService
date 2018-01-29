@@ -1,47 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
+using System.ServiceModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Client.ServiceReference1;
+using Kundenservice;
 
 namespace Client
 {
     /// <summary>
-    /// Interaktionslogik für BookManagement.xaml
+    ///     Interaktionslogik für BookManagement.xaml
     /// </summary>
-    public partial class BookManagement : Window
+    public partial class BookManagement : Window, IBookUpdateCallback
     {
         public DataSet books;
+        public InstanceContext context;
+        public AktienInfoClient proxy;
+
         public BookManagement()
         {
             InitializeComponent();
+            context = new InstanceContext(this);
+            proxy = new AktienInfoClient(context);
         }
 
-        public void getBooks(DataSet ds)
+       
+       
+    
+        
+        public void loadBooks(DataSet ds)
         {
             dataGrid.ItemsSource = books.Tables["LoadBooks"].DefaultView;
         }
+
         public void loginUser(int status)
         {
-
         }
+
         public void UpdateUsers(DataSet ds)
         {
-
         }
+
         public void BookUpdate(string x, double test, DataSet ds)
         {
+        }
 
+        private void btnAddWishlist_Click(object sender, RoutedEventArgs e)
+        {
+            proxy.
         }
     }
-
 }

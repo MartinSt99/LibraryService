@@ -23,34 +23,65 @@ namespace Kundenservice
         public void addBook(Book b)
         {
             books.Add(b);
+          
+            Console.WriteLine("Requesting login for user");
+            BookUpdate bgWorker = new BookUpdate();
+            bgWorker.callback = OperationContext.Current.GetCallbackChannel<IBookWishlistCallback>();
+            Thread thread = new Thread(delegate () { bgWorker.AddBook(b); });
+            thread.IsBackground = true;
+            thread.Start();
+                
+        
+
+        }
+
+        public void wishlistAdd(Book b, string user)
+        {
+            books.Add(b);
+
+            Console.WriteLine("Requesting wishlist add for user " + user);
+            BookUpdate bgWorker = new BookUpdate();
+            bgWorker.callback = OperationContext.Current.GetCallbackChannel<IBookWishlistCallback>();
+            Thread thread = new Thread(delegate () { bgWorker.WishlistAdd(b, user); });
+            thread.IsBackground = true;
+            thread.Start();
+
+
+
         }
 
         public Book getBook(Guid id)
         {
-            return books.Find(x => x.ID == id);
+            //return books.Find(x => x.ID == id);
+            return new Book("a", "t", DateTime.Now, " ");
         }
 
         public void delBook(Guid id)
         {
-            books.RemoveAll(x => x.ID == id);
+            //books.RemoveAll(x => x.ID == id);
         }
+
+
+        
     }
 
     [DataContract]
     public class Book
     {
-        public Book(string a, string t, DateTime p, Guid id)
+        public Book(string a, string t, DateTime p, string id)
         {
             Author = a;
             Title = t;
-            Published = p;
-            ID = id;
+            existsSince = p;
+            ean = id;
         }
-
+        public int isAvailable { get; set; }
         public string Author { get; set; }
         public string Title { get; set; }
-        public DateTime Published { get; set; }
-        public Guid ID { get; set; }
+        public DateTime existsSince { get; set; }
+        public string ean { get; set; }
+        public string lastUpdated { get; set; }
+
     }
 
 
@@ -73,7 +104,7 @@ namespace Kundenservice
 
 
     }
-    [ServiceContract]
+    [ServiceContract(CallbackContract = typeof(IBookWishlistCallback))]
     public interface IOrderService
     {
         [OperationContract]
@@ -88,9 +119,25 @@ namespace Kundenservice
         [OperationContract]
         void delBook(Guid b);
 
+        [OperationContract(IsOneWay = true)]
+        void wishlistAdd(Book b, string user);
 
 
         // TODO: Hier Dienstvorgänge hinzufügen
+    }
+
+    [ServiceContract]
+    public interface IBookWishlistCallback
+    {
+        [OperationContract(IsOneWay = true)]
+        void AddBook();
+
+        [OperationContract(IsOneWay = true)]
+        void DelBook();
+
+        [OperationContract(IsOneWay = true)]
+        void FindBook();
+
     }
 
     [ServiceContract]
@@ -107,6 +154,42 @@ namespace Kundenservice
 
         [OperationContract(IsOneWay = true)]
         void loadBooks(DataSet ds);
+    }
+
+    public class BookUpdate
+    {
+
+        public string ean { get; set; }
+        public IBookWishlistCallback callback = null;
+        static string password = "";
+
+        string connStr =
+            "server=localhost;user=root;database=libraryservice;port=3306;password=" + password +
+            ";convert zero datetime=True";
+
+        public void AddBook(Book b)
+        {
+            Console.WriteLine("Insert Book");
+            MySqlConnection conn = new MySqlConnection(connStr);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO `books`(`ean`, `title`, `author`, `isAvailable`, `lastUpdate`, `existsSince`) VALUES ('" + b.ean + "','" + b.Title + "','" + b.Author + "'," + b.isAvailable + ",'" + b.lastUpdated + "','" + b.existsSince + "')", conn);
+            cmd.ExecuteNonQuery();
+            callback.AddBook();
+            Console.WriteLine("called callback\n-------------------------------\n");
+        }
+
+        public void WishlistAdd(Book b, string user)
+        {
+            Console.WriteLine("Insert Book into wishlist");
+            MySqlConnection conn = new MySqlConnection(connStr);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO `wishlish`(`uid`, `bid`, `wishCreated`) VALUES ('" + "','" + b.Title +"','" + DateTime.Now + "')", conn);
+            cmd.ExecuteNonQuery();
+            callback.AddBook();
+            Console.WriteLine("called callback\n-------------------------------\n");
+
+
+        }
     }
 
     public class AktienInfo : IAktienInfo

@@ -7,12 +7,14 @@
         mc:Ignorable="d"
         Title="Login" Height="312.605" Width="473.109">
     <Grid>
-        <TextBox x:Name="txtUser" TextWrapping="Wrap" Margin="119,22,10,0" Height="30" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtPwd" TextWrapping="Wrap" Margin="119,59,10,0" Height="30" VerticalAlignment="Top"/>
-        <Button x:Name="btnLogin" Content="Login" Margin="10,96,10,0" Click="btnLogin_Click" Height="26" VerticalAlignment="Top"/>
-        <ListBox x:Name="lbxLog" Margin="10,127,10,10"/>
-        <Label Content="Benutzername:" HorizontalAlignment="Left" Margin="10,22,0,0" Height="26" VerticalAlignment="Top"/>
-        <Label Content="Passwort:" HorizontalAlignment="Left" Margin="10,59,0,0" Height="26" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtUser" TextWrapping="Wrap" Margin="119,22,10,0" Height="30" VerticalAlignment="Top" />
+        <TextBox x:Name="txtPwd" TextWrapping="Wrap" Margin="119,59,10,0" Height="30" VerticalAlignment="Top" />
+        <Button x:Name="btnLogin" Content="Login" Margin="10,96,10,0" Click="btnLogin_Click" Height="26"
+                VerticalAlignment="Top" />
+        <ListBox x:Name="lbxLog" Margin="10,127,10,10" />
+        <Label Content="Benutzername:" HorizontalAlignment="Left" Margin="10,22,0,0" Height="26"
+               VerticalAlignment="Top" />
+        <Label Content="Passwort:" HorizontalAlignment="Left" Margin="10,59,0,0" Height="26" VerticalAlignment="Top" />
 
     </Grid>
 </Window>

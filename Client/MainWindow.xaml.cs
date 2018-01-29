@@ -1,83 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Data;
 using System.ServiceModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Data;
-
-
+using Client.ServiceReference1;
+using Kundenservice;
 
 namespace Client
 {
     /// <summary>
     ///     Interaktionslogik für MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, ServiceReference1.IAktienInfoCallback
+    public partial class MainWindow : Window, IAktienInfoCallback
     {
-        public string user;
-        public ServiceReference1.AktienInfoClient proxy;
+        private readonly OrderBooks x = new OrderBooks();
+        private List<Book> bl = new List<Book>();
         public InstanceContext context;
-        private readonly Kundenservice.OrderBooks x = new Kundenservice.OrderBooks();
-        private List<Kundenservice.Book> bl = new List<Kundenservice.Book>();
-        
+        public AktienInfoClient proxy;
+        public string user;
+
         public MainWindow()
         {
             Dispatcher.Invoke(() =>
             {
                 InitializeComponent();
                 context = new InstanceContext(this);
-                proxy = new ServiceReference1.AktienInfoClient(context);
-                //proxy.connect("test");
+                proxy = new AktienInfoClient(context);
             });
-         
-            
-
         }
 
         public void loginUser(int stat)
         {
-            
         }
 
         public void loadBooks(DataSet ds)
         {
-            Dispatcher.Invoke((Action)delegate
+            Dispatcher.Invoke(delegate
             {
-                BookManagement usrmgmt = new BookManagement();
-                usrmgmt.books = ds;
-
-                //usrmgmt.users
+                var usrmgmt = new BookManagement {books = ds};
                 usrmgmt.Show();
-                usrmgmt.getBooks(ds);
-
+                usrmgmt.loadBooks(ds);
             });
         }
 
         public void UpdateUsers(DataSet ds)
         {
-            Dispatcher.Invoke((Action)delegate
+            Dispatcher.Invoke(delegate
             {
-                userManagement usrmgmt = new userManagement();
-                usrmgmt.users = ds;
-
-                //usrmgmt.users
+                var usrmgmt = new userManagement {users = ds};
                 usrmgmt.Show();
                 usrmgmt.UpdateUsers(ds);
-
             });
-
-            
         }
 
         public void BookUpdate(string ticker, double preis, DataSet ds)
         {
-
-           
         }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var temp = new Kundenservice.Book(aText.Text, tText.Text, pdate.SelectedDate.Value, Guid.NewGuid());
+            var temp = new Book(aText.Text, tText.Text, pdate.SelectedDate.Value, "x");
 
             x.addBook(temp);
             var z = x.getwishList();
@@ -90,7 +72,7 @@ namespace Client
         {
             var temp = x.getBook(new Guid(gText.Text));
             bGrid.ItemsSource = null;
-            var templist = new List<Kundenservice.Book>();
+            var templist = new List<Book>();
             templist.Add(temp);
             bGrid.ItemsSource = templist;
         }
@@ -99,15 +81,14 @@ namespace Client
         {
             try
             {
-                var tempbook = (Kundenservice.Book)bGrid.SelectedItem;
-                bGrid.ItemsSource = null;
-                x.delBook(new Guid(tempbook.ID.ToString()));
-                bGrid.ItemsSource = x.getwishList();
-            }
+            //    var tempbook = (Book) bGrid.SelectedItem;
+            //    bGrid.ItemsSource = null;
+            //    x.delBook(new Guid(tempbook.ID.ToString()));
+            //    bGrid.ItemsSource = x.getwishList();
+            //}
             catch (Exception exception)
             {
             }
-          
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
@@ -115,7 +96,7 @@ namespace Client
             bGrid.ItemsSource = x.getwishList();
         }
 
-        
+
         private void getPrice_Click(object sender, RoutedEventArgs e)
         {
         }
@@ -128,7 +109,6 @@ namespace Client
         private void btnLoadBooks_Click(object sender, RoutedEventArgs e)
         {
             proxy.getBooks("me");
-
         }
     }
 }

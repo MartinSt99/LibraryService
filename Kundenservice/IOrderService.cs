@@ -23,31 +23,23 @@ namespace Kundenservice
         public void addBook(Book b)
         {
             books.Add(b);
-          
-            Console.WriteLine("Requesting login for user");
+            Console.WriteLine("Requesting AddBook for user");
             BookUpdate bgWorker = new BookUpdate();
             bgWorker.callback = OperationContext.Current.GetCallbackChannel<IBookWishlistCallback>();
             Thread thread = new Thread(delegate () { bgWorker.AddBook(b); });
             thread.IsBackground = true;
             thread.Start();
-                
-        
-
         }
 
         public void wishlistAdd(Book b, string user)
         {
             books.Add(b);
-
             Console.WriteLine("Requesting wishlist add for user " + user);
             BookUpdate bgWorker = new BookUpdate();
             bgWorker.callback = OperationContext.Current.GetCallbackChannel<IBookWishlistCallback>();
             Thread thread = new Thread(delegate () { bgWorker.WishlistAdd(b, user); });
             thread.IsBackground = true;
             thread.Start();
-
-
-
         }
 
         public Book getBook(Guid id)
@@ -68,6 +60,10 @@ namespace Kundenservice
     [DataContract]
     public class Book
     {
+        public Book()
+        {
+
+        }
         public Book(string a, string t, DateTime p, string id)
         {
             Author = a;
@@ -195,7 +191,10 @@ namespace Kundenservice
     public class AktienInfo : IAktienInfo
     {
         
-    
+    public void test()
+        {
+
+        }
         public void RegisterForUpdate(string symbol, string username)
         {
             Console.WriteLine("Requesting registering for update");

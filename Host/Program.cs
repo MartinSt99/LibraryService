@@ -11,8 +11,10 @@ namespace Host
         {
             //var host = new ServiceHost(typeof(OrderBooks));
             var host = new ServiceHost(typeof(AktienInfo));
+            var host2 = new ServiceHost(typeof(OrderBooks));
             //var host = new ServiceHost(typeof(OrderService));
             host.Open();
+            host2.Open();
             Console.WriteLine("Running");
             Console.ReadLine();
         }

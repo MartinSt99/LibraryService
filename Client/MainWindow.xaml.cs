@@ -70,6 +70,7 @@ namespace Client
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+
             var temp = x.getBook(new Guid(gText.Text));
             bGrid.ItemsSource = null;
             var templist = new List<Book>();
@@ -81,11 +82,12 @@ namespace Client
         {
             try
             {
-            //    var tempbook = (Book) bGrid.SelectedItem;
-            //    bGrid.ItemsSource = null;
-            //    x.delBook(new Guid(tempbook.ID.ToString()));
-            //    bGrid.ItemsSource = x.getwishList();
-            //}
+                //    var tempbook = (Book) bGrid.SelectedItem;
+                //    bGrid.ItemsSource = null;
+                //    x.delBook(new Guid(tempbook.ID.ToString()));
+                //    bGrid.ItemsSource = x.getwishList();
+                //
+            }
             catch (Exception exception)
             {
             }

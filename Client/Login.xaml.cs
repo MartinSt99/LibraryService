@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,9 @@ namespace Client
             proxy = new AktienInfoClient(context);
             lbxLog.Items.Add("Initialized System..");
             lbxLog.Items.Add("----------------------------------");
+           
+        
+            
         }
 
         public void loginUser(int status)
@@ -70,8 +74,11 @@ namespace Client
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            
             proxy.getLogin(txtUser.Text, txtPwd.Text);
             lbxLog.Items.Add("Sent credentials to server, please be pacient...");
+        
+            
         }
     }
 }

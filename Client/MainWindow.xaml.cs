@@ -1,10 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.ServiceModel;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using Client.ServiceReference1;
 using Kundenservice;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace Client
 {
@@ -26,10 +35,37 @@ namespace Client
                 InitializeComponent();
                 context = new InstanceContext(this);
                 proxy = new AktienInfoClient(context);
+                gText.PreviewKeyDown += EnterClicked;
             });
+           
+        }
+        void EnterClicked(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Return)
+            {
+
+                var isbn = gText.Text.Split('F')[1];
+                var body = GetDocumentContents("https://www.googleapis.com/books/v1/volumes?q=" + isbn + "+isbn&key=AIzaSyCj1CyB6GBbejRkSD2sV9XAqcS7QzeVHE8&country=AT");
+                dynamic stuff = JsonConvert.DeserializeObject(body.ToString());
+                var title = stuff.items[0].volumeInfo.title.ToString();
+                var authors = stuff.items[0].volumeInfo.authors.ToString();
+                MessageBox.Show(title + " " + authors);
+                e.Handled = true;
+            }
+            
         }
 
-        public void loginUser(int stat)
+        private string GetDocumentContents(string url)
+        {
+            using(WebClient wc = new WebClient())
+            {
+                var json = wc.DownloadString(url);
+                return json;
+            }
+
+        }
+      
+            public void loginUser(int stat)
         {
         }
 

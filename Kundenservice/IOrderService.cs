@@ -24,8 +24,10 @@ namespace Kundenservice
         {
             books.Add(b);
             Console.WriteLine("Requesting AddBook for user");
-            BookUpdate bgWorker = new BookUpdate();
-            bgWorker.callback = OperationContext.Current.GetCallbackChannel<IBookWishlistCallback>();
+            BookUpdate bgWorker = new BookUpdate
+            {
+                callback = OperationContext.Current.GetCallbackChannel<IBookWishlistCallback>()
+            };
             Thread thread = new Thread(delegate () { bgWorker.AddBook(b); });
             thread.IsBackground = true;
             thread.Start();
@@ -156,12 +158,13 @@ namespace Kundenservice
     {
 
         public string ean { get; set; }
+        public IBookWishlistCallback Callback { get => callback; set => callback = value; }
+
         public IBookWishlistCallback callback = null;
-        static string password = "";
+        static string password = "Linkstart1";
 
         string connStr =
-            "server=localhost;user=root;database=libraryservice;port=3306;password=" + password +
-            ";convert zero datetime=True";
+            "server=165.227.160.225;user=root2;database=libraryservice;port=3306;password=" + password + ";convert zero datetime=True;convert zero datetime=True";
 
         public void AddBook(Book b)
         {
@@ -247,9 +250,9 @@ namespace Kundenservice
         
         public string Aktie { get; set; }
         public IBookUpdateCallback callback = null;
-        static string password = "";
+        static string password = "Linkstart1";
         string connStr =
-            "server=localhost;user=root;database=libraryservice;port=3306;password=" + password + ";convert zero datetime=True";
+            "server=165.227.160.225;user=root2;database=libraryservice;port=3306;password=" + password + ";convert zero datetime=True";
 
         public void getBooks()
         {
@@ -306,9 +309,6 @@ namespace Kundenservice
                 Console.WriteLine("Check book");
                 Thread.Sleep(1000);
 
-                string password = "";
-                string connStr =
-                    "server=localhost;user=root;database=libraryservice;port=3306;password=" + password + ";convert zero datetime=True";
                 MySqlConnection conn = new MySqlConnection(connStr);
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM users", conn);

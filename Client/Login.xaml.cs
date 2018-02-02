@@ -43,7 +43,7 @@ namespace Client
                             var main = new MainWindow();
                             main.user = txtUser.Text;
                             main.Show();
-                            Hide();
+                            Close();
                         });
                     });
                 }

@@ -5,24 +5,33 @@ using System.Windows;
 using Client.ServiceReference1;
 using Kundenservice;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using Client.ServiceReference2;
+using MySql.Data.MySqlClient;
 
 namespace Client
 {
     /// <summary>
     ///     Interaktionslogik für BookManagement.xaml
     /// </summary>
-    public partial class BookManagement : Window, IBookUpdateCallback, IBookWishlistCallback
+    public partial class BookManagement : Window, IBookUpdateCallback, IBookWishlistCallback, IOrderServiceCallback
     {
         public DataSet books;
         public InstanceContext context;
         public AktienInfoClient proxy;
-        public ServiceReference2.OrderServiceClient client;
+        public string user;
+        public OrderServiceClient client;
+        string password = "Linkstart1";
+
+        private string connStr;
         public BookManagement()
-        {
+        { 
+           connStr = "server=165.227.160.225;user=root2;database=libraryservice;port=3306;password=" + password + ";convert zero datetime=True;convert zero datetime=True";
+
             InitializeComponent();
             context = new InstanceContext(this);
-            client = new ServiceReference2.OrderServiceClient(context);
+            client = new OrderServiceClient(context);
         }
 
        
@@ -33,6 +42,28 @@ namespace Client
         {
 
             dataGrid.ItemsSource = books.Tables["LoadBooks"].DefaultView;
+            loadWishlist();
+        }
+
+        public void loadWishlist()
+        {
+            Task.Run(() =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    Console.WriteLine("Send Books");
+                    MySqlConnection conn = new MySqlConnection(connStr);
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT * FROM wishlist", conn);
+                    MySqlDataAdapter adp = new MySqlDataAdapter(cmd);
+                    DataSet ds = new DataSet();
+                    adp.Fill(ds, "LoadWishlist");
+                    dataGridWishlist.ItemsSource = ds.Tables["LoadWishlist"].DefaultView;
+
+                });
+               
+            });
+           
         }
 
         public void loginUser(int status)
@@ -52,38 +83,73 @@ namespace Client
             var outtext = "";
             Book b = new Book();
             var ctr = 0;
+            try
+            {
+               
 
-            foreach (var item in dataGrid.SelectedCells)
-            {var obj = (item.Column.GetCellContent(item.Item) as TextBlock).Text;
-                if (ctr == 1)
+                foreach(var item in dataGrid.SelectedCells)
                 {
-                    b.ean = obj;
-                }else if(ctr == 2)
-                {
-                    b.Title = obj;
-                }else if(ctr == 3)
-                {
-                    b.Author = obj;
-                }else if(ctr == 4){
-                    b.isAvailable = int.Parse(obj);
-                }else if(ctr== 5)
-                {
-                    b.lastUpdated = obj;
-                }else if(ctr == 6)
-                {
-                    b.existsSince = Convert.ToDateTime(obj);
+                    var obj = (item.Column.GetCellContent(item.Item) as TextBlock).Text;
+                    if(ctr == 1)
+                    {
+                        b.ean = obj;
+                    }
+                    else if(ctr == 2)
+                    {
+                        b.Title = obj;
+                    }
+                    else if(ctr == 3)
+                    {
+                        b.Author = obj;
+                    }
+                    else if(ctr == 4)
+                    {
+                        b.isAvailable = int.Parse(obj);
+                    }
+                    else if(ctr == 5)
+                    {
+                        b.lastUpdated = obj;
+                    }
+                    else if(ctr == 6)
+                    {
+                        b.existsSince = Convert.ToDateTime(obj);
+                    }
+                    ctr++;
                 }
-                ctr++;
+                Console.WriteLine("Test");
+                //MessageBox.Show(b.Author + " " + b.Title);
+                wishlistAddBook(b, user);
+                loadWishlist();
             }
-
-            Console.WriteLine("Test");
+            catch (Exception exception)
+            {
+            }
+           
 
         }
 
+        public void wishlistAddBook(Book b,string user)
+        {
+            try
+            {
+                Console.WriteLine("Insert Book into wishlist");
+                MySqlConnection conn = new MySqlConnection(connStr);
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO `wishlist`(`uid`, `bid`) VALUES ('" + user + "','" + b.Title + "')", conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Bereits in der Wunschliste enthalten!");
+            }
+            
+
+
+        }
         public void AddBook()
         {
-            //Book tmpBook = new Book()
-            //client.addBook()
+            MessageBox.Show("Buch hinzugefügt");
         }
 
         public void DelBook()

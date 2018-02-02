@@ -36,6 +36,7 @@ namespace Client
                 context = new InstanceContext(this);
                 proxy = new AktienInfoClient(context);
                 gText.PreviewKeyDown += EnterClicked;
+                
             });
            
         }
@@ -43,14 +44,23 @@ namespace Client
         {
             if(e.Key == Key.Return)
             {
+                try
+                {
+                    var isbn = gText.Text.Split('F')[1];
+                    var body = GetDocumentContents("https://www.googleapis.com/books/v1/volumes?q=" + isbn + "+isbn&key=AIzaSyCj1CyB6GBbejRkSD2sV9XAqcS7QzeVHE8&country=AT");
+                    dynamic stuff = JsonConvert.DeserializeObject(body.ToString());
+                    var title = stuff.items[0].volumeInfo.title.ToString();
+                    var authors = stuff.items[0].volumeInfo.pageCount.ToString();
 
-                var isbn = gText.Text.Split('F')[1];
-                var body = GetDocumentContents("https://www.googleapis.com/books/v1/volumes?q=" + isbn + "+isbn&key=AIzaSyCj1CyB6GBbejRkSD2sV9XAqcS7QzeVHE8&country=AT");
-                dynamic stuff = JsonConvert.DeserializeObject(body.ToString());
-                var title = stuff.items[0].volumeInfo.title.ToString();
-                var authors = stuff.items[0].volumeInfo.authors.ToString();
-                MessageBox.Show(title + " " + authors);
-                e.Handled = true;
+                    MessageBox.Show(title + " " + authors);
+                    e.Handled = true;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Google API has no result for this :-(");
+                    Console.WriteLine(exception);
+                }
+             
             }
             
         }
@@ -75,6 +85,7 @@ namespace Client
             {
                 var usrmgmt = new BookManagement {books = ds};
                 usrmgmt.Show();
+                usrmgmt.user = user;
                 usrmgmt.loadBooks(ds);
             });
         }

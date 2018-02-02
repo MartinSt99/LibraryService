@@ -35,13 +35,15 @@ namespace Kundenservice
 
         public void wishlistAdd(Book b, string user)
         {
-            books.Add(b);
+
+            Console.WriteLine(b.Author, b.Title);
             Console.WriteLine("Requesting wishlist add for user " + user);
             BookUpdate bgWorker = new BookUpdate();
             bgWorker.callback = OperationContext.Current.GetCallbackChannel<IBookWishlistCallback>();
             Thread thread = new Thread(delegate () { bgWorker.WishlistAdd(b, user); });
             thread.IsBackground = true;
             thread.Start();
+
         }
 
         public Book getBook(Guid id)
@@ -182,8 +184,9 @@ namespace Kundenservice
             Console.WriteLine("Insert Book into wishlist");
             MySqlConnection conn = new MySqlConnection(connStr);
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO `wishlish`(`uid`, `bid`, `wishCreated`) VALUES ('" + "','" + b.Title +"','" + DateTime.Now + "')", conn);
-            cmd.ExecuteNonQuery();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO `wishlist`(`uid`, `bid`, `dateAdded`) VALUES ('" + user +  "','" + b.Title +"','" + DateTime.Now + "')", conn);
+
+           cmd.ExecuteNonQuery();
             callback.AddBook();
             Console.WriteLine("called callback\n-------------------------------\n");
 

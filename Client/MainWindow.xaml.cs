@@ -15,15 +15,23 @@ using Kundenservice;
 using Newtonsoft.Json;
 using System.Web;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using MySql.Data.MySqlClient;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Client
 {
     /// <summary>
     ///     Interaktionslogik für MainWindow.xaml
     /// </summary>
+    /// 
+
     public partial class MainWindow : Window, IAktienInfoCallback
     {
+        string connStr = "server=165.227.160.225;user=root2;database=libraryservice;port=3306;password=Linkstart1;convert zero datetime=True;convert zero datetime=True";
+        private string password = "Linkstart1";
         private readonly OrderBooks x = new OrderBooks();
         private List<Book> bl = new List<Book>();
         public InstanceContext context;
@@ -38,140 +46,188 @@ namespace Client
                 context = new InstanceContext(this);
                 proxy = new AktienInfoClient(context);
                 gText.PreviewKeyDown += EnterClicked;
-                
+                this.WindowState = WindowState.Maximized;
             });
-           
+
         }
+
         void EnterClicked(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Return)
+            if (e.Key == Key.Return)
             {
                 try
                 {
-                    var isbn = gText.Text.Split('F')[1];
-                    var body = GetDocumentContents("https://www.googleapis.com/books/v1/volumes?q=" + isbn + "+isbn&key=AIzaSyCj1CyB6GBbejRkSD2sV9XAqcS7QzeVHE8&country=AT");
-                    dynamic stuff = JsonConvert.DeserializeObject(body.ToString());
-                    var title = stuff.items[0].volumeInfo.title.ToString();
-                    var authors = "";
-                    foreach (var author in stuff.items[0].volumeInfo.authors)
-                    {
-                        authors += author + " ";
-                    }
-                    List<Book> blist = new List<Book>(1);
                     Book tempBook = new Book();
-                    tempBook.Author = authors;
-                    try
+                    var isbn = gText.Text.Split('F')[1];
+                    var body = GetDocumentContents("https://www.googleapis.com/books/v1/volumes?q=" + isbn +
+                                                   "+isbn&key=AIzaSyCj1CyB6GBbejRkSD2sV9XAqcS7QzeVHE8&country=AT");
+                    dynamic stuff = JsonConvert.DeserializeObject(body.ToString());
+                    List<Book> blist = new List<Book>();
+                    foreach(var book in stuff.items)
                     {
-                        tempBook.Title = stuff.items[0].volumeInfo.title.ToString();
-
-                    }
-                    catch (Exception exception)
-                    {
-                    }
-                    try
-                    {
-                        tempBook.Title = stuff.items[0].volumeInfo.title.ToString();
-
-                    }
-                    catch (Exception exception)
-                    {
-                        Console.WriteLine(exception);
-                        throw;
-                    }
-                    try
-                    {
-                        tempBook.description = stuff.items[0].volumeInfo.description.ToString();
-
-                    }
-                    catch (Exception exception)
-                    {
-                    }
-                    try
-                    {
-                        tempBook.pageCount = stuff.items[0].volumeInfo.pageCount.ToString();
-
-                    }
-                    catch (Exception exception)
-                    {
-                    }
-                    try
-                    {
-                        tempBook.averageRating = stuff.items[0].volumeInfo.averageRating.ToString();
 
 
-                    }
-                    catch (Exception exception)
-                    {
-                    }
-                    try
-                    {
-                        tempBook.imageLinks = stuff.items[0].volumeInfo.imageLinks.smallThumbnail.ToString();
+                        var title = book.volumeInfo.title.ToString();
+                        var authors = "";
+                        foreach(var author in book.volumeInfo.authors)
+                        {
+                            authors += author + " ";
+                        }
 
-                    }
-                    catch (Exception exception)
-                    {
-                    }
-                    try
-                    {
-                        tempBook.publishedDate = stuff.items[0].volumeInfo.publishedDate.ToString();
+                        tempBook = new Book();
+                        tempBook.Author = authors;
+                        try
+                        {
+                            tempBook.ean = book.volumeInfo.industryIdentifiers[1].identifier.ToString();
 
-                    }
-                    catch (Exception exception)
-                    {
-                    }
-                    try
-                    {
-                        tempBook.language = stuff.items[0].volumeInfo.lanugage;
+                        }
+                        catch(Exception exception)
+                        {
+                         //   MessageBox.Show("Error parsing ean");
 
-                    }
-                    catch (Exception exception)
-                    {
-                    }
-                    blist.Add(tempBook);
-                    bGrid.ItemsSource = null;
-                    bGrid.ItemsSource = blist;
-                    bGrid.Items.Refresh();
-                    var image = new Image();
-                    try
-                    {
-                        wrapPanel1.Children.Clear();
-                        var fullFilePath = tempBook.imageLinks;
-                        BitmapImage bitmap = new BitmapImage();
-                        bitmap.BeginInit();
-                        bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
-                        bitmap.EndInit();
+                        }
+                        try
+                        {
+                            tempBook.Title = book.volumeInfo.title.ToString();
 
-                        image.Source = bitmap;
-                        wrapPanel1.Children.Clear();
-                        wrapPanel1.Children.Add(image);
+                        }
+                        catch(Exception exception)
+                        {
+                         //   MessageBox.Show("Error parsing title");
+
+                        }
+                        try
+                        {
+                            tempBook.description = book.volumeInfo.description.ToString();
+
+                        }
+                        catch(Exception exception)
+                        {
+                          //  MessageBox.Show("Error parsing description");
+
+                        }
+                        try
+                        {
+                            tempBook.pageCount = book.volumeInfo.pageCount.ToString();
+
+                        }
+                        catch(Exception exception)
+                        {
+                           // MessageBox.Show("Error parsing description");
+
+                        }
+                        try
+                        {
+                            tempBook.averageRating = book.volumeInfo.averageRating.ToString();
+
+
+                        }
+                        catch(Exception exception)
+                        {
+                          //  MessageBox.Show("error parsing averagerating");
+
+                        }
+                        try
+                        {
+                            tempBook.imageLinks = book.volumeInfo.imageLinks.smallThumbnail.ToString();
+
+                        }
+                        catch(Exception exception)
+                        {
+                            //MessageBox.Show("Error parsing imagelink");
+
+                        }
+                        try
+                        {
+                            tempBook.publishedDate = new DateTime(book.volumeInfo.publishedDate.ToString(), 1, 1, 0, 0, 0).ToString();
+                        }
+                        catch(Exception exception)
+                        {
+                            //MessageBox.Show("Error parsing PublishedDate");
+
+                        }
+                        try
+                        {
+                            tempBook.language = book.volumeInfo.language;
+
+                        }
+                        catch(Exception exception)
+                        {
+                          //  MessageBox.Show("Error parsing language");
+
+                        }
+                        Dispatcher.Invoke(() =>
+                        {
+                            blist.Add(tempBook);
+
+
+                        });
                     }
-                    catch (Exception exception)
+                    //endregion
+                    Dispatcher.Invoke(() =>
                     {
-                    }
-                  
-                    e.Handled = true;
+                        bGrid.ItemsSource = null;
+                        bGrid.ItemsSource = blist;
+                        bGrid.Items.Refresh();
+
+
+                        e.Handled = true;
+                    });
                 }
                 catch (Exception exception)
                 {
                     MessageBox.Show("Google API has no result for this :-(");
                     Console.WriteLine(exception);
                 }
-             
+
             }
-            
+
+        }
+
+        public void ShowImage()
+        {
+            Book tempBook = new Book();
+            var ctr = 1;
+            var imageLink = "";
+            foreach(var item in bGrid.SelectedCells)
+            {
+                var obj = (item.Column.GetCellContent(item.Item) as TextBlock).Text;
+                if(ctr == 11)
+                {                    imageLink = obj;
+                }
+                Console.WriteLine(obj.ToString() + " " + ctr);
+                ctr++;
+            }
+            var image = new Image();
+            try
+            {
+                wrapPanel1.Children.Clear();
+                var fullFilePath = imageLink;
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+                bitmap.EndInit();
+
+                image.Source = bitmap;
+                wrapPanel1.Children.Clear();
+                wrapPanel1.Children.Add(image);
+            }
+            catch(Exception exception)
+            {
+            }
         }
 
         private string GetDocumentContents(string url)
         {
-            using(WebClient wc = new WebClient())
+            using (WebClient wc = new WebClient())
             {
                 var json = wc.DownloadString(url);
                 return json;
             }
 
         }
-      
-            public void loginUser(int stat)
+
+        public void loginUser(int stat)
         {
         }
 
@@ -179,11 +235,20 @@ namespace Client
         {
             Dispatcher.Invoke(delegate
             {
-                var usrmgmt = new BookManagement {books = ds};
-                usrmgmt.Show();
-                usrmgmt.user = user;
-                usrmgmt.loadBooks(ds);
+                var book = new Books {books = ds};
+                book.Show();
+                book.user = user;
+                book.loadBooks(ds);
+                //var usrmgmt = new BookManagement {books = ds};
+                //usrmgmt.Show();
+                //usrmgmt.user = user;
+                //usrmgmt.loadBooks(ds);
             });
+        }
+
+        public void loadRegisteredBooks(DataSet ds)
+        {
+
         }
 
         public void UpdateUsers(DataSet ds)
@@ -254,6 +319,77 @@ namespace Client
         private void btnLoadBooks_Click(object sender, RoutedEventArgs e)
         {
             proxy.getBooks("me");
+        }
+
+        private void UserManagement_Click(object sender, RoutedEventArgs e)
+        {
+            proxy.getUsers(user);
+        }
+
+        private void BookManagement_Click(object sender, RoutedEventArgs e)
+        {
+            proxy.getBooks(user);
+        }
+
+        private void gText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            int ctr = 1;
+            //AddBook
+            var b = new Book();
+            try
+            {
+                foreach(var item in bGrid.SelectedCells)
+                {
+                    var obj = (item.Column.GetCellContent(item.Item) as TextBlock).Text;
+                    if(ctr == 1)
+                    {
+                        b.Author = obj;
+                    }
+                    else if(ctr == 2)
+                    {
+                        b.Title = obj;
+                    }
+                    else if(ctr == 10)
+                    {
+                        b.language = obj;
+                    }
+                    ctr++;
+                }
+                AddBookToBookList(b);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        public void AddBookToBookList(Book b)
+        {
+            try
+            {
+                Console.WriteLine("Insert Book into booklist");
+                MySqlConnection conn = new MySqlConnection(connStr);
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO `books`(`ean`, `title`, `author`,`isAvailable`) VALUES ('" + b.ean + "','" + b.Title + "','" + b.Author + "',1)", conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception e)
+            {
+                
+            }
+            MessageBox.Show("Buch wurde hinzugefügt!");
+
+        }
+
+        private void bGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ShowImage();
         }
     }
 }

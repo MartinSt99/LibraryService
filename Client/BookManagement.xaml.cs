@@ -80,50 +80,54 @@ namespace Client
 
         private void btnAddWishlist_Click(object sender, RoutedEventArgs e)
         {
-            var outtext = "";
-            Book b = new Book();
-            var ctr = 0;
-            try
+            Task.Run(() =>
             {
-
-
-                foreach(var item in dataGrid.SelectedCells)
+                var outtext = "";
+                Book b = new Book();
+                var ctr = 0;
+                try
                 {
-                    var obj = (item.Column.GetCellContent(item.Item) as TextBlock).Text;
-                    if(ctr == 1)
+
+
+                    foreach(var item in dataGrid.SelectedCells)
                     {
-                        b.ean = obj;
+                        var obj = (item.Column.GetCellContent(item.Item) as TextBlock).Text;
+                        if(ctr == 1)
+                        {
+                            b.ean = obj;
+                        }
+                        else if(ctr == 2)
+                        {
+                            b.Title = obj;
+                        }
+                        else if(ctr == 3)
+                        {
+                            b.Author = obj;
+                        }
+                        else if(ctr == 4)
+                        {
+                            b.isAvailable = int.Parse(obj);
+                        }
+                        else if(ctr == 5)
+                        {
+                            b.lastUpdated = obj;
+                        }
+                        else if(ctr == 6)
+                        {
+                            b.existsSince = Convert.ToDateTime(obj);
+                        }
+                        ctr++;
                     }
-                    else if(ctr == 2)
-                    {
-                        b.Title = obj;
-                    }
-                    else if(ctr == 3)
-                    {
-                        b.Author = obj;
-                    }
-                    else if(ctr == 4)
-                    {
-                        b.isAvailable = int.Parse(obj);
-                    }
-                    else if(ctr == 5)
-                    {
-                        b.lastUpdated = obj;
-                    }
-                    else if(ctr == 6)
-                    {
-                        b.existsSince = Convert.ToDateTime(obj);
-                    }
-                    ctr++;
+                    Console.WriteLine("Test");
+                    //MessageBox.Show(b.Author + " " + b.Title);
+                    wishlistAddBook(b, user);
+                    loadWishlist();
                 }
-                Console.WriteLine("Test");
-                //MessageBox.Show(b.Author + " " + b.Title);
-                wishlistAddBook(b, user);
-                loadWishlist();
-            }
-            catch(Exception exception)
-            {
-            }
+                catch(Exception exception)
+                {
+                }
+            });
+            
 
 
         }

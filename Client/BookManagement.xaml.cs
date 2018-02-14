@@ -85,7 +85,7 @@ namespace Client
             var ctr = 0;
             try
             {
-               
+
 
                 foreach(var item in dataGrid.SelectedCells)
                 {
@@ -121,10 +121,10 @@ namespace Client
                 wishlistAddBook(b, user);
                 loadWishlist();
             }
-            catch (Exception exception)
+            catch(Exception exception)
             {
             }
-           
+
 
         }
 
@@ -160,6 +160,70 @@ namespace Client
         public void FindBook()
         {
             throw new NotImplementedException();
+        }
+
+        private void delBookFromWishlist(Book b, string user)
+        {
+            try
+            {
+                Console.WriteLine("Delete Book from wishlist");
+                MySqlConnection conn = new MySqlConnection(connStr);
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM `wishlist` WHERE `uid` = '" + user + "' AND `bid` = '" + b.Title + "'", conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Buch ist nichtmehr in der Wunschliste! Bitte öffne das Fenster neu.");
+            }
+        }
+        private void btnDel_Click(object sender, RoutedEventArgs e)
+        {
+
+            var outtext = "";
+            Book b = new Book();
+            var ctr = 0;
+            try
+            {
+                foreach(var item in dataGridWishlist.SelectedCells)
+                {
+                    var obj = (item.Column.GetCellContent(item.Item) as TextBlock).Text;
+                    if(ctr == 1)
+                    {
+                        b.ean = obj;
+                    }
+                    else if(ctr == 2)
+                    {
+                        b.Title = obj;
+                    }
+                    else if(ctr == 3)
+                    {
+                        b.Author = obj;
+                    }
+                    else if(ctr == 4)
+                    {
+                        b.isAvailable = int.Parse(obj);
+                    }
+                    else if(ctr == 5)
+                    {
+                        b.lastUpdated = obj;
+                    }
+                    else if(ctr == 6)
+                    {
+                        b.existsSince = Convert.ToDateTime(obj);
+                    }
+                    ctr++;
+                }
+                Console.WriteLine("Test");
+                //MessageBox.Show(b.Author + " " + b.Title);
+                delBookFromWishlist(b, user);
+                loadWishlist();
+            }
+            catch(Exception exception)
+            {
+            }
+
         }
     }
 }

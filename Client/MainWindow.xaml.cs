@@ -14,6 +14,8 @@ using Client.ServiceReference1;
 using Kundenservice;
 using Newtonsoft.Json;
 using System.Web;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace Client
 {
@@ -50,9 +52,103 @@ namespace Client
                     var body = GetDocumentContents("https://www.googleapis.com/books/v1/volumes?q=" + isbn + "+isbn&key=AIzaSyCj1CyB6GBbejRkSD2sV9XAqcS7QzeVHE8&country=AT");
                     dynamic stuff = JsonConvert.DeserializeObject(body.ToString());
                     var title = stuff.items[0].volumeInfo.title.ToString();
-                    var authors = stuff.items[0].volumeInfo.pageCount.ToString();
+                    var authors = "";
+                    foreach (var author in stuff.items[0].volumeInfo.authors)
+                    {
+                        authors += author + " ";
+                    }
+                    List<Book> blist = new List<Book>(1);
+                    Book tempBook = new Book();
+                    tempBook.Author = authors;
+                    try
+                    {
+                        tempBook.Title = stuff.items[0].volumeInfo.title.ToString();
 
-                    MessageBox.Show(title + " " + authors);
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                    try
+                    {
+                        tempBook.Title = stuff.items[0].volumeInfo.title.ToString();
+
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                        throw;
+                    }
+                    try
+                    {
+                        tempBook.description = stuff.items[0].volumeInfo.description.ToString();
+
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                    try
+                    {
+                        tempBook.pageCount = stuff.items[0].volumeInfo.pageCount.ToString();
+
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                    try
+                    {
+                        tempBook.averageRating = stuff.items[0].volumeInfo.averageRating.ToString();
+
+
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                    try
+                    {
+                        tempBook.imageLinks = stuff.items[0].volumeInfo.imageLinks.smallThumbnail.ToString();
+
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                    try
+                    {
+                        tempBook.publishedDate = stuff.items[0].volumeInfo.publishedDate.ToString();
+
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                    try
+                    {
+                        tempBook.language = stuff.items[0].volumeInfo.lanugage;
+
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                    blist.Add(tempBook);
+                    bGrid.ItemsSource = null;
+                    bGrid.ItemsSource = blist;
+                    bGrid.Items.Refresh();
+                    var image = new Image();
+                    try
+                    {
+                        wrapPanel1.Children.Clear();
+                        var fullFilePath = tempBook.imageLinks;
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+                        bitmap.EndInit();
+
+                        image.Source = bitmap;
+                        wrapPanel1.Children.Clear();
+                        wrapPanel1.Children.Add(image);
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                  
                     e.Handled = true;
                 }
                 catch (Exception exception)

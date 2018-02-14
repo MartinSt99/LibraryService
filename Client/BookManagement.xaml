@@ -8,7 +8,7 @@
         Title="BookRental" Height="438.967" Width="678.674">
     <Grid>
         <Button x:Name="btnAddWishlist" Content="Zur Wunschliste hinzufügen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Margin="15,197,0,0" Click="btnAddWishlist_Click" Height="32"/>
-        <Button x:Name="btnDel" Content="Von der Wunschliste löschen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Margin="340,197,0,0" Height="32"/>
+        <Button x:Name="btnDel" Content="Von der Wunschliste entfernen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Margin="340,197,0,0" Height="32" Click="btnDel_Click"/>
         <GroupBox Header="Alle Bücher" HorizontalAlignment="Left" Height="179" Margin="10,10,0,0" VerticalAlignment="Top" Width="652">
             <DataGrid x:Name="dataGrid" Margin="10,10,4,0" Height="143" VerticalAlignment="Top" />
         </GroupBox>

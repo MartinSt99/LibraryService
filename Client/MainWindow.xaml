@@ -20,7 +20,7 @@
         <TextBox x:Name="tText" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text=""
                  VerticalAlignment="Top" Width="322" Margin="74,50,0,0" />
         <Label Content="Published" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,70,0,0" />
-        <Label Content="Guid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,96,0,0" />
+        <Label Content="ISBN" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,96,0,0" />
         <TextBox x:Name="gText" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text=""
                  VerticalAlignment="Top" Width="322" Margin="74,98,0,0" />
         <Button Content="Find" HorizontalAlignment="Left" Margin="409,96,0,0" VerticalAlignment="Top" Width="75"
@@ -32,7 +32,7 @@
                 Click="Button_Click_2" />
         <Button Content="GetWishlist" HorizontalAlignment="Left" Margin="136,285,0,0" VerticalAlignment="Top"
                 Width="75" Click="Button_Click_3" />
-        <GroupBox Header="Options" HorizontalAlignment="Left" Height="299" VerticalAlignment="Top" Width="117"
+        <GroupBox Header="Options" HorizontalAlignment="Left" Height="116" VerticalAlignment="Top" Width="117"
                   Margin="5,0,0,0" Grid.Column="1">
             <Grid Margin="4,14,26,214">
                 <Button x:Name="btnLoadUsers_Copy1" Content="Load Users" HorizontalAlignment="Left"
@@ -41,6 +41,7 @@
 
             </Grid>
         </GroupBox>
+        <WrapPanel x:Name="wrapPanel1" HorizontalAlignment="Left" Height="159" Margin="401,146,0,0" VerticalAlignment="Top" Width="205" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>

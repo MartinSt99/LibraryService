@@ -75,9 +75,18 @@ namespace Kundenservice
             existsSince = p;
             ean = id;
         }
-        public int isAvailable { get; set; }
         public string Author { get; set; }
         public string Title { get; set; }
+        public string published { get; set; }
+        public string publishedDate { get; set; }
+        public string language { get; set; }
+        public string description { get; set; }
+        public string pageCount { get; set; }
+        public string categories { get; set; }
+        public string averageRating { get; set; } 
+        public string maturityRating { get; set; }
+        public string imageLinks { get; set; } 
+        public int isAvailable { get; set; }
         public DateTime existsSince { get; set; }
         public string ean { get; set; }
         public string lastUpdated { get; set; }

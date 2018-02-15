@@ -47,8 +47,17 @@ namespace Client
                 proxy = new AktienInfoClient(context);
                 gText.PreviewKeyDown += EnterClicked;
                 this.WindowState = WindowState.Maximized;
+                menuAdmin.Visibility = Visibility.Hidden;
             });
 
+        }
+
+        public void checkAdmin()
+        {
+            if (user == "MartinSt")
+            {
+                menuAdmin.Visibility = Visibility.Visible;
+            }
         }
 
         void EnterClicked(object sender, KeyEventArgs e)
@@ -192,7 +201,7 @@ namespace Client
             foreach(var item in bGrid.SelectedCells)
             {
                 var obj = (item.Column.GetCellContent(item.Item) as TextBlock).Text;
-                if(ctr == 11)
+                if(ctr == 12)
                 {                    imageLink = obj;
                 }
                 Console.WriteLine(obj.ToString() + " " + ctr);
@@ -390,6 +399,15 @@ namespace Client
         private void bGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ShowImage();
+        }
+
+        private void LendingManagement_OnClick(object sender, RoutedEventArgs e)
+        {
+            myLendings s = new myLendings();
+            s.user = user;
+            s.setUser();
+            s.ShowDialog();
+            
         }
     }
 }

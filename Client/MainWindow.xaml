@@ -14,9 +14,16 @@
                 <MenuItem Header="Datei">
                     <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
                 </MenuItem>
-                <MenuItem Header="Bearbeiten">
-                    <MenuItem x:Name="UserManagement" Header="Schüler anzeigen" HorizontalAlignment="Left" Width="250" Click="UserManagement_Click"/>
+                <MenuItem Header="Optionen">
                     <MenuItem x:Name="BookManagement" Header="Vorhandene Bücher anzeigen" HorizontalAlignment="Left" Width="250" Click="BookManagement_Click"/>
+                    <MenuItem x:Name="LendingManagement" Header="Meine Entlehnungen anzeigen" HorizontalAlignment="Left" Width="250" Click="LendingManagement_OnClick"/>
+
+                </MenuItem>
+                <MenuItem x:Name="menuAdmin" Header="Administrator">
+                    <MenuItem x:Name="UserManagementAdmin" Header="Schüler anzeigen" HorizontalAlignment="Left" Width="250" Click="UserManagement_Click"/>
+                    <MenuItem x:Name="BookManagementAdmin" Header="Vorhandene Bücher anzeigen" HorizontalAlignment="Left" Width="250" Click="BookManagement_Click"/>
+                    <MenuItem x:Name="LendingManagementAdmin" Header="Vorhandene Entlehnungen anzeigen" HorizontalAlignment="Left" Width="280" Click="LendingManagement_OnClick"/>
+
                 </MenuItem>
                 <MenuItem Header="Hilfe">
                     <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>

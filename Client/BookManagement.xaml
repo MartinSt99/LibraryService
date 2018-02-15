@@ -10,7 +10,18 @@
         <Button x:Name="btnAddWishlist" Content="Zur Wunschliste hinzufügen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Margin="15,197,0,0" Click="btnAddWishlist_Click" Height="32"/>
         <Button x:Name="btnDel" Content="Von der Wunschliste entfernen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Margin="340,197,0,0" Height="32" Click="btnDel_Click"/>
         <GroupBox Header="Alle Bücher" HorizontalAlignment="Left" Height="179" Margin="10,10,0,0" VerticalAlignment="Top" Width="652">
-            <DataGrid x:Name="dataGrid" Margin="10,10,4,0" Height="143" VerticalAlignment="Top" />
+            <DataGrid x:Name="dataGrid" Margin="10,10,4,0" Height="143" VerticalAlignment="Top">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Buch reservieren">
+                        </MenuItem>
+                        <MenuItem Header="Buch ausborgen">
+                        </MenuItem>
+                    </ContextMenu>
+
+                </DataGrid.ContextMenu>
+
+            </DataGrid>
         </GroupBox>
         <GroupBox Header="Wunschliste" HorizontalAlignment="Left" Height="167" VerticalAlignment="Top" Width="650" Margin="10,231,0,0">
             <DataGrid x:Name="dataGridWishlist" Height="122" VerticalAlignment="Top" Margin="10,10,-2,0"/>

@@ -75,6 +75,7 @@ namespace Kundenservice
             existsSince = p;
             ean = id;
         }
+        public int id { get; set; }
         public string Author { get; set; }
         public string Title { get; set; }
         public string published { get; set; }

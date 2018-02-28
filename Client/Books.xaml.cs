@@ -121,6 +121,11 @@ namespace Client
                                 "INSERT INTO `lending`(`bid`, `uid`, `duration`,`comment`) VALUES ('" + b.id + "','" +
                                 user + "'," + duration + ",'" + comment + "')", conn);
                         cmd.ExecuteNonQuery();
+                        MySqlCommand cmmd =
+                            new MySqlCommand(
+                                "UPDATE books set isAvailable = 0 where id = " + b.id, conn);
+                        cmmd.ExecuteNonQuery();
+
                         conn.Close();
                     }
                     catch (Exception e)

@@ -28,13 +28,21 @@ namespace Client
             
         }
 
-        public void loginUser(int status)
+        public void loginUser(Kundenservice.AktienInfo.ServiceData status, Kundenservice.AktienInfo.ReturnedBooks rb)
         {
             Dispatcher.Invoke(delegate
             {
-                if (status == 1)
+
+                if (status.Result)
                 {
+                    lbxLog.Items.Add(status.ErrorMessage + ":");
+                    lbxLog.Items.Add(status.ErrorDetails);
                     lbxLog.Items.Add("Successfully logged in.. waiting for redirect...");
+                    if (rb.hasReturned)
+                    {
+                        MessageBox.Show("Bücher wurden zurückgebracht, bei interesse beachten Sie ihre Wunschliste.");
+                        MessageBox.Show("Bücher: " + rb.Books);
+                    }
                     Task.Run(() =>
                     {
                         Thread.Sleep(2000);
@@ -48,8 +56,9 @@ namespace Client
                         });
                     });
                 }
-                else if (status == 0)
+                else if (!status.Result)
                 {
+
                     lbxLog.Items.Add("login not successfull.. waiting for retry...");
                     lbxLog.Items.Add("----------------------------------");
                     Task.Run(() => { Thread.Sleep(2000); });
@@ -73,10 +82,15 @@ namespace Client
         {
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            
-            proxy.getLogin(txtUser.Text, txtPwd.Text);
+            Kundenservice.AktienInfo.ServiceData x = await proxy.getLoginAsync(txtUser.Text, txtPwd.Text);
+
+            if (x.Result)
+            {
+                lbxLog.Items.Add("Successfully logged in.. waiting for redirect...");
+            }
+
             lbxLog.Items.Add("Sent credentials to server, please be pacient...");
         
             

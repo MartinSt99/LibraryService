@@ -236,7 +236,7 @@ namespace Client
 
         }
 
-        public void loginUser(int stat)
+        public void loginUser(Kundenservice.AktienInfo.ServiceData x, Kundenservice.AktienInfo.ReturnedBooks rb)
         {
         }
 

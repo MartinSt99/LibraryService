@@ -202,6 +202,9 @@
     <None Include="Connected Services\ServiceReference1\item2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\ServiceReference1\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\ServiceReference2\item.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -213,6 +216,7 @@
     </None>
     <None Include="Connected Services\ServiceReference2\OrderBooks.wsdl" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Kundenservice.AktienInfo.datasource" />
     <None Include="Properties\DataSources\Kundenservice.Book.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

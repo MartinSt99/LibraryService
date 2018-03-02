@@ -16,7 +16,7 @@ namespace Client
             InitializeComponent();
         }
 
-        public void loginUser(int status)
+        public void loginUser(Kundenservice.AktienInfo.ServiceData x, Kundenservice.AktienInfo.ReturnedBooks rb)
         {
         }
 

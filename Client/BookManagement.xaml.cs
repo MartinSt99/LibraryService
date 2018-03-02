@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Client.ServiceReference2;
 using MySql.Data.MySqlClient;
+using Client;
 
 namespace Client
 {
@@ -66,7 +67,7 @@ namespace Client
            
         }
 
-        public void loginUser(int status)
+        public void loginUser(Kundenservice.AktienInfo.ServiceData x, Kundenservice.AktienInfo.ReturnedBooks y)
         {
         }
 
@@ -143,11 +144,14 @@ namespace Client
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
-            catch (Exception e)
+            catch (FaultException<Kundenservice.AktienInfo.ServiceData> exception)
             {
                 MessageBox.Show("Bereits in der Wunschliste enthalten!");
+
+                MessageBox.Show(@"ErrorMessage::" + exception.Detail.ErrorMessage + Environment.NewLine);
+                MessageBox.Show(@"ErrorDetails::" + Environment.NewLine + exception.Detail.ErrorDetails);
             }
-            
+
 
 
         }
